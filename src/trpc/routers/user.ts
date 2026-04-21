@@ -1,26 +1,18 @@
 import { z } from "zod";
-import { publicProcedure, privateProcedure } from "../procedures";
+import { publicProcedure } from "../procedures";
 import { router } from "../trpc";
-import { Context } from "../context";
+import { db } from "../../lib/firebase/admin";
 
 export const userRouter = router({
-  // Public procedures
-  getAllUsers: publicProcedure.query(({ ctx }) => {
-    const context = ctx as Context;
-    return context.prisma.user.findMany();
+  /** Returns a list of all registered user profiles from Firestore */
+  getAllUsers: publicProcedure.query(async () => {
+    const snapshot = await db.collection("users").limit(20).get();
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   }),
-    
-  // Private procedures (require authentication)
-  me: privateProcedure.query(({ ctx }) => {
-    // Get the current user based on auth context
-    // In a real app, you'd get the user ID from the auth token
-    // For demo purposes, using a hardcoded ID:
-    // const userId = "current-user-id";
-    
-    // return ctx.prisma.user.findUnique({
-    //   where: { id: userId }
-    // });
-  }),
-  
 
+  /** Get the current demo user profile */
+  me: publicProcedure.query(async () => {
+    const doc = await db.collection("users").doc("demo_user_001").get();
+    return doc.exists ? { id: doc.id, ...doc.data() } : null;
+  }),
 });

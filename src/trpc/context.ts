@@ -1,16 +1,5 @@
-/** @description Context util handling backend state */
-import { prisma } from '../db';
-import type {CreateExpressContextOptions} from "@trpc/server/adapters/express";
+/** @description tRPC context for Fetch adapter (Next.js App Router compatible) */
 
-/**
- * Creates the context for tRPC by extracting the request and response objects from the Express context options.
- */
-export const createContext = ({
-
-  req,
-  res,
-}: CreateExpressContextOptions) => ({
-  prisma, req, res
-});
+export const createContext = () => ({});
 
 export type Context = ReturnType<typeof createContext>;

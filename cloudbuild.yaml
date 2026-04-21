@@ -1,0 +1,32 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/slingshot-amd/slingshot-amd:$COMMIT_SHA', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/slingshot-amd/slingshot-amd:$COMMIT_SHA']
+
+  - name: 'gcr.io/google-cloud-builder/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'slingshot-amd'
+      - '--image'
+      - 'gcr.io/slingshot-amd/slingshot-amd:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--env-vars-file'
+      - '.env.yaml'
+      - '--service-account'
+      - 'slingshot-amd@slingshot-amd.iam.gserviceaccount.com'
+    envVars:
+      - key: 'GOOGLE_API_KEY'
+        value: '$GOOGLE_API_KEY'
+
+images:
+  - 'gcr.io/slingshot-amd/slingshot-amd:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

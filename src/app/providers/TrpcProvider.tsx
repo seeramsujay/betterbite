@@ -1,22 +1,30 @@
 "use client";
 
+import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { getFetch, httpBatchLink, loggerLink } from "@trpc/react-query";
-import { useState } from "react";
-import superjson from "superjson";
 import { trpc } from "../utils/trpc";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 5 * 1000 } },
-});
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: { queries: { staleTime: 5 * 1000 } },
+  });
+}
+
+// Singleton on server, new instance per browser session
+let browserQueryClient: QueryClient | undefined;
+function getQueryClient() {
+  if (typeof window === "undefined") return makeQueryClient();
+  if (!browserQueryClient) browserQueryClient = makeQueryClient();
+  return browserQueryClient;
+}
 
 export default function TrpcProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const url = "/api/trpc";
+  const queryClient = getQueryClient();
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -25,15 +33,11 @@ export default function TrpcProvider({
           enabled: () => process.env.NODE_ENV === "development",
         }),
         httpBatchLink({
-          url,
+          url: "/api/trpc",
           fetch: async (input, init?) => {
             const fetch = getFetch();
-            return fetch(input, {
-              ...init,
-              credentials: "include",
-            });
+            return fetch(input, { ...init, credentials: "include" });
           },
-          transformer: superjson,
         }),
       ],
     })
@@ -43,7 +47,6 @@ export default function TrpcProvider({
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {children}
-        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </trpc.Provider>
   );

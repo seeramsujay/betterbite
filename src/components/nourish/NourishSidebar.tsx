@@ -1,4 +1,8 @@
+"use client";
+
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { NAV_ITEMS, USER_INFO } from '../../data/mockData';
 import { useAppStore } from '../../lib/store/useAppStore';
 
@@ -7,6 +11,9 @@ interface NourishSidebarProps {
 }
 
 export const NourishSidebar: React.FC<NourishSidebarProps> = ({ className = '' }) => {
+  // ✅ Hook at top level
+  const pathname = usePathname();
+
   return (
     <aside className={`fixed left-0 top-0 h-screen w-72 flex flex-col justify-between bg-stone-100/40 backdrop-blur-xl py-10 px-6 z-50 ${className}`}>
       <div className="flex flex-col gap-8">
@@ -15,20 +22,23 @@ export const NourishSidebar: React.FC<NourishSidebarProps> = ({ className = '' }
           <p className="font-body font-light uppercase tracking-widest text-[0.75rem] text-stone-500">The Digital Larder</p>
         </div>
         <nav className="flex flex-col gap-4">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className={`flex items-center gap-4 pl-4 transition-all duration-300 ${
-                item.label === 'Nourish'
-                  ? 'text-primary font-bold border-l-4 border-primary'
-                  : 'text-stone-500 hover:bg-primary/5 hover:text-primary'
-              }`}
-            >
-              <span className="material-symbols-outlined">{item.icon}</span>
-              <span className="font-body font-light uppercase tracking-widest text-[0.75rem]">{item.label}</span>
-            </a>
-          ))}
+          {NAV_ITEMS.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`flex items-center gap-4 pl-4 transition-all duration-300 ${
+                  isActive
+                    ? 'text-primary font-bold border-l-4 border-primary'
+                    : 'text-stone-500 hover:bg-primary/5 hover:text-primary'
+                }`}
+              >
+                <span className="material-symbols-outlined">{item.icon}</span>
+                <span className="font-body font-light uppercase tracking-widest text-[0.75rem]">{item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
       </div>
       <div className="flex flex-col gap-4">

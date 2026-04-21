@@ -4,9 +4,11 @@ import React, { useState, useRef } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useAppStore } from "../../lib/store/useAppStore";
 import { fileToBase64 } from "../../lib/utils/image";
+import { trpc } from "../../app/utils/trpc";
 
 export const MealLogModal: React.FC = () => {
   const { isMealLogOpen, setMealLogOpen } = useAppStore();
+  const utils = trpc.useUtils();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -35,6 +37,7 @@ export const MealLogModal: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setResult(data.data);
+        utils.meal.getLogs.invalidate();
       } else {
         alert("Analysis failed: " + data.error);
       }

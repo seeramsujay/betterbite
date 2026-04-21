@@ -1,4 +1,8 @@
+"use client";
+
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { NAV_ITEMS, USER_INFO } from '../../data/mockData';
 import { useAppStore } from '../../lib/store/useAppStore';
 
@@ -7,28 +11,34 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
+  // ✅ Hook called at top level — not inside map()
+  const pathname = usePathname();
+
   return (
-    <aside className={`flex flex-col py-8 px-6 h-screen w-64 fixed left-0 top-0 border-r-0 bg-surface-container-low dark:bg-stone-900 z-50 ${className}`}>
+    <aside className={`flex flex-col py-8 px-6 h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-stone-900 z-50 ${className}`}>
       <div className="mb-10">
-        <h1 className="font-headline text-2xl italic tracking-tight text-primary dark:text-primary-fixed">BetterBite</h1>
+        <h1 className="font-headline text-2xl italic tracking-tight text-primary">BetterBite</h1>
         <p className="text-[0.7rem] uppercase tracking-widest opacity-60 mt-1">Precision Metabolic Engine</p>
       </div>
       
       <nav className="flex-1 space-y-2">
-        {NAV_ITEMS.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className={`flex items-center gap-3 py-3 px-4 rounded-lg transition-all duration-200 ${
-              item.active
-                ? 'text-primary dark:text-primary-fixed font-bold border-r-2 border-primary bg-surface-variant/30'
-                : 'text-on-surface/60 dark:text-stone-400 font-medium hover:bg-surface-variant dark:hover:bg-stone-800'
-            }`}
-          >
-            <span className="material-symbols-outlined">{item.icon}</span>
-            <span className="text-lg">{item.label}</span>
-          </a>
-        ))}
+        {NAV_ITEMS.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`flex items-center gap-3 py-3 px-4 rounded-lg transition-all duration-200 ${
+                isActive
+                  ? 'text-primary font-bold border-r-2 border-primary bg-primary/10'
+                  : 'text-on-surface/60 font-medium hover:bg-surface-variant hover:text-on-surface'
+              }`}
+            >
+              <span className="material-symbols-outlined">{item.icon}</span>
+              <span className="text-sm">{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="mt-auto pt-6 border-t border-outline-variant/20">
