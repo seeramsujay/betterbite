@@ -1,5 +1,7 @@
 import "./globals.css";
 import React from 'react';
+import MealLogModal from "./components/modals/MealLogModal";
+import RecipeModal from "./components/modals/RecipeModal";
 
 export const metadata = {
   title: "BetterBite",
@@ -28,6 +30,8 @@ export default function RootLayout({
       </head>
       <body className="antialiased font-body bg-background text-on-surface">
         {children}
+        <MealLogModal />
+        <RecipeModal />
         <script
           dangerouslySetInnerHTML={{
             __html: `

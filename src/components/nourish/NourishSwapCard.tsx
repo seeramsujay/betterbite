@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAppStore } from '../../lib/store/useAppStore';
 
 interface NourishSwapCardProps {
   readonly before: string;
@@ -17,8 +18,13 @@ export const NourishSwapCard: React.FC<NourishSwapCardProps> = ({
   beforeImg,
   afterImg,
 }) => {
+  const { setRecipeModalOpen } = useAppStore();
+
   return (
-    <div className="min-w-[400px] snap-start bg-surface-container-lowest p-8 flex flex-col gap-6 group hover:shadow-2xl transition-all duration-500">
+    <div 
+      onClick={() => setRecipeModalOpen(true, after)}
+      className="min-w-[400px] snap-start bg-surface-container-lowest p-8 flex flex-col gap-6 group hover:shadow-2xl transition-all duration-500 cursor-pointer"
+    >
       <div className="grid grid-cols-2 gap-4 relative">
         <div className="flex flex-col gap-2">
           <div className="overflow-hidden rounded-lg aspect-square">

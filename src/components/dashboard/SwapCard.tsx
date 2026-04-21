@@ -1,10 +1,12 @@
 import React from 'react';
+import { useAppStore } from '../../lib/store/useAppStore';
 
 interface SwapCardProps {
   readonly title: string;
   readonly metrics: readonly string[];
   readonly beforeImg: string;
   readonly afterImg: string;
+  readonly className?: string;
 }
 
 export const SwapCard: React.FC<SwapCardProps> = ({
@@ -12,9 +14,15 @@ export const SwapCard: React.FC<SwapCardProps> = ({
   metrics,
   beforeImg,
   afterImg,
+  className = '',
 }) => {
+  const { setRecipeModalOpen } = useAppStore();
+
   return (
-    <div className="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm group">
+    <div 
+      onClick={() => setRecipeModalOpen(true, title)}
+      className={`min-w-[340px] bg-white rounded-3xl p-6 shadow-sm border border-stone-100 flex flex-col gap-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer group ${className}`}
+    >
       <div className="flex h-40">
         <div className="w-1/2 relative overflow-hidden">
           <img
