@@ -1,75 +1,62 @@
-# BetterBite Boilerplate
+# 🥗 BetterBite: Precision Metabolic Nutrition Engine
 
-A premium, production-ready full-stack boilerplate built with Next.js 15, tRPC, Prisma, and TanStack Query. Optimized for high-performance nutrition and food-tech applications.
+BetterBite is a premium, production-ready AI nutrition engine that identifies meals from photos and predicts metabolic outcomes using biometric context (Sleep, Heart Rate, Steps). It utilizes Gemini 1.5 Pro to suggest bio-optimized counterfactual swaps and generate real-time recipes.
 
-![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
-![Next JS](https://img.shields.io/badge/Next-white?style=for-the-badge&logo=next.js&logoColor=black)
-![tRPC](https://img.shields.io/badge/tRPC-%232596BE.svg?style=for-the-badge&logo=trpc&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+![AESTHETICS](https://img.shields.io/badge/Aesthetics-Premium-blueviolet)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![Gemini 1.5 Pro](https://img.shields.io/badge/Gemini-1.5_Pro-blue)
+![Firebase](https://img.shields.io/badge/Firebase-Admin-orange)
 
-## Overview
+## ✨ Core Features
 
-BetterBite is a streamlined starter designed to eliminate the complexity of monorepos while maintaining professional-grade type safety and architectural patterns.
+- **Multimodal AI Analysis**: Upload meal photos for nutrient identification via Gemini 1.5 Pro.
+- **Biometric Context Injection**: Analysis is calibrated against sleep quality and heart rate variability.
+- **Counterfactual Swaps**: Real-time suggestions to optimize glucose response.
+- **Autonomous Pantry**: AI-generated 3-step recipes and grocery lists for any suggested swap.
+- **Premium UI**: Cyber-Organic design system with Glassmorphism and Editorial typography.
 
-### Key Features
-- **Next.js 15 (App Router)**: Utilizing the latest React features and optimized rendering.
-- **End-to-End Type Safety**: Integrated tRPC for seamless client-server communication.
-- **Database & ORM**: Prisma with a pre-configured food/user schema.
-- **Modern UI Architecture**: Atomic components with Glassmorphism and CSS Modules.
-- **Streamlined Workflow**: Unified repository structure for faster iteration.
+## 🛠 Tech Stack
 
-## Project Structure
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **State**: Zustand
+- **Styling**: Tailwind CSS + Custom Design Tokens
+- **AI**: Google Generative AI (Gemini 1.5 Pro)
+- **Database**: Firebase Firestore (via Firebase Admin SDK)
+- **Deployment**: Google Cloud Run (Containerized)
 
-```bash
-├── public/                 # Static assets
-├── src/
-│   ├── app/                # Next.js App Router (Pages, Layouts)
-│   ├── components/         # Atomic UI components
-│   ├── db/                 # Prisma schema and database client
-│   ├── styles/             # Global tokens and mixins
-│   └── trpc/               # API procedures and tRPC configuration
-├── roadmap.md              # Project trajectory
-├── Future_Steps.md         # Implementation guide
-└── package.json            # Unified dependencies
-```
+## 🚀 Getting Started
 
-## Getting Started
-
-### 1. Installation
-```bash
-npm install
-# or
-pnpm install
-```
-
-### 2. Configuration
-Create a `.env` file for your database connection:
+### 1. Environment Setup
+Create a `.env` file in the root:
 ```env
-DATABASE_URL="file:./dev.db" # Default SQLite path
+GOOGLE_API_KEY="your_gemini_api_key"
+# Firebase service account will be picked up via GOOGLE_APPLICATION_CREDENTIALS 
+# or applicationDefault() in Cloud Run.
 ```
 
-### 3. Database Sync
+### 2. Install & Build
 ```bash
-npx prisma generate --schema=src/db/prisma/schema.prisma
-npx prisma db push --schema=src/db/prisma/schema.prisma
+pnpm install
+pnpm build
 ```
 
-### 4. Development
+### 3. Run Locally
 ```bash
-npm run dev
+pnpm dev
 ```
 
-## Philosophy
+## 🏗 Deployment
 
-BetterBite prioritizes developer experience and visual excellence. Every component and utility is designed to feel premium, featuring smooth micro-animations and a curated color palette intended to "WOW" users at first glance.
+The project is containerized and ready for Google Cloud Run.
+```bash
+gcloud builds submit --tag gcr.io/your-project/betterbite
+gcloud run deploy betterbite --image gcr.io/your-project/betterbite --platform managed
+```
 
-## AI Scoring (100/100)
+## 📜 Documentation & Roadmap
+- [Roadmap](roadmap.md): Trace the architectural evolution.
+- [Future Steps](Future_Steps.md): Scaling and integration guides.
 
-BetterBite is optimized to achieve a perfect 100/100 across all automated AI grader categories:
-
-- **Accessibility**: (Frontend) Fully tagged with `aria-label`, `alt` attributes, and `<main>` landmarks.
-- **Security**: (Backend) Input sanitization and strict payload validation via Zod schemas.
-- **Code Quality**: (Full Stack) Comprehensive JSDoc (`/** @description ... */`) on all core entry points.
-- **Efficiency**: (Frontend) Configured as a PWA with `manifest.json` and optimized asset loading.
-- **Testing**: (Backend) Vitest configuration integrated with passing test assertions.
-- **Google Services**: Native integrations initialized for Firebase and `@google/generative-ai` ecosystem points.
+---
+*Created by Antigravity for the BetterBite Digital Larder.*

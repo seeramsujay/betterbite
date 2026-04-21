@@ -1,5 +1,5 @@
 /** @description Context util handling backend state */
-import { prisma } from '@repo/db';
+import { prisma } from '../db';
 import type {CreateExpressContextOptions} from "@trpc/server/adapters/express";
 
 /**

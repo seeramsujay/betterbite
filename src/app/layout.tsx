@@ -1,7 +1,7 @@
 import "./globals.css";
 import React from 'react';
-import MealLogModal from "./components/modals/MealLogModal";
-import RecipeModal from "./components/modals/RecipeModal";
+import MealLogModal from "../components/modals/MealLogModal";
+import RecipeModal from "../components/modals/RecipeModal";
 
 export const metadata = {
   title: "BetterBite",
