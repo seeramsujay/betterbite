@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import Sidebar from "./dashboard/Sidebar";
-import TopNav from "./dashboard/TopNav";
+import dynamic from "next/dynamic";
 import MealItem from "./dashboard/MealItem";
 import { trpc } from "../app/utils/trpc";
 import { ClientOnly } from "./ui/ClientOnly";
+
+const Sidebar = dynamic(() => import("./dashboard/Sidebar"), { ssr: false });
+const TopNav = dynamic(() => import("./dashboard/TopNav"), { ssr: false });
 
 export const JournalFeed: React.FC = () => {
   const { data: logs, isLoading } = trpc.meal.getLogs.useQuery();

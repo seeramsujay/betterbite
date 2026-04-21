@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import NourishSidebar from "./nourish/NourishSidebar";
-import NourishTopNav from "./nourish/NourishTopNav";
+import dynamic from "next/dynamic";
 import NourishSwapCard from "./nourish/NourishSwapCard";
 import RecipeCard from "./nourish/RecipeCard";
 import { NOURISH_SWAPS, SEASONAL_RECIPES } from "../data/mockData";
+
+const NourishSidebar = dynamic(() => import("./nourish/NourishSidebar"), { ssr: false });
+const NourishTopNav = dynamic(() => import("./nourish/NourishTopNav"), { ssr: false });
 
 export interface NourishFeedProps {
   readonly className?: string;
