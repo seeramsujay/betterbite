@@ -3,10 +3,17 @@ import { METABOLIC_READINESS } from '../../data/mockData';
 
 interface ReadinessCardProps {
   readonly className?: string;
+  readonly score?: number;
+  readonly status?: string;
+  readonly description?: string;
 }
 
-export const ReadinessCard: React.FC<ReadinessCardProps> = ({ className = '' }) => {
-  const { score, status, description } = METABOLIC_READINESS;
+export const ReadinessCard: React.FC<ReadinessCardProps> = ({
+  className = '',
+  score = METABOLIC_READINESS.score,
+  status = METABOLIC_READINESS.status,
+  description = METABOLIC_READINESS.description,
+}) => {
   const strokeDasharray = 552.92;
   const strokeDashoffset = strokeDasharray - (strokeDasharray * score) / 100;
 

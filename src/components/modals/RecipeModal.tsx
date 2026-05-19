@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useAppStore } from "../../lib/store/useAppStore";
+import { playAudioFeedback } from "../../lib/utils/audio";
 
 export const RecipeModal: React.FC = () => {
   const { isRecipeModalOpen, selectedSwapItem, setRecipeModalOpen } = useAppStore();
@@ -19,6 +20,7 @@ export const RecipeModal: React.FC = () => {
 
   const fetchRecipe = async () => {
     setIsLoading(true);
+    playAudioFeedback("thinking");
     try {
       const res = await fetch("/api/recipe", {
         method: "POST",
@@ -27,10 +29,14 @@ export const RecipeModal: React.FC = () => {
       });
       const data = await res.json();
       if (data.success) {
+        playAudioFeedback("success");
         setRecipe(data.data);
+      } else {
+        playAudioFeedback("error");
       }
     } catch (err) {
       console.error(err);
+      playAudioFeedback("error");
     } finally {
       setIsLoading(false);
     }
@@ -42,7 +48,7 @@ export const RecipeModal: React.FC = () => {
         <Dialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]" />
         <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-surface-container-lowest rounded-[2rem] p-0 shadow-2xl z-[101] border border-outline-variant/20 overflow-hidden">
           {isLoading ? (
-            <div className="p-20 flex flex-col items-center justify-center gap-6">
+            <div className="p-20 flex flex-col items-center justify-center gap-6" aria-live="polite" role="status">
               <div className="w-16 h-16 border-4 border-secondary border-t-transparent rounded-full animate-spin"></div>
               <div className="text-center">
                 <p className="font-headline text-2xl mb-1 italic">Generating Kitchen Intelligence</p>

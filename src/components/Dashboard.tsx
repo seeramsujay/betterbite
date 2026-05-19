@@ -11,6 +11,7 @@ import { BIOMETRICS, SMARTER_SWAPS, TODAY_JOURNEY } from "../data/mockData";
 import { trpc } from "../app/utils/trpc";
 import { useAppStore } from "../lib/store/useAppStore";
 import { ClientOnly } from "./ui/ClientOnly";
+import { calculateMetabolicReadiness } from "../lib/utils/metabolic";
 
 // ssr:false → these components use usePathname / browser APIs
 // prevents hydration mismatch between server HTML and client render
@@ -23,7 +24,69 @@ export interface DashboardProps {
 
 export const Dashboard: React.FC<DashboardProps> = ({ className = "" }) => {
   const setMealLogOpen = useAppStore((s) => s.setMealLogOpen);
+  const biometrics = useAppStore((s) => s.biometrics);
+  const setBiometrics = useAppStore((s) => s.setBiometrics);
+  const setBiometricsModalOpen = useAppStore((s) => s.setBiometricsModalOpen);
+
   const { data: logs, isLoading: logsLoading } = trpc.meal.getLogs.useQuery();
+  const { data: serverBiometrics } = trpc.meal.getBiometrics.useQuery();
+
+  // Sync server biometrics to Zustand on load
+  React.useEffect(() => {
+    if (serverBiometrics) {
+      setBiometrics({
+        sleepHours: serverBiometrics.sleepHours,
+        currentHeartRate: serverBiometrics.currentHeartRate,
+        dailySteps: serverBiometrics.dailySteps,
+      });
+    }
+  }, [serverBiometrics, setBiometrics]);
+
+  // Compute Metabolic Readiness Score & state dynamically
+  const readiness = useMemo(() => {
+    return calculateMetabolicReadiness(biometrics);
+  }, [biometrics]);
+
+  // Compute dynamic biometric metrics for the grid
+  const dynamicBiometrics = useMemo(() => {
+    const hrvValue = Math.max(20, Math.min(120, Math.round(116 - biometrics.currentHeartRate * 1.0)));
+    return [
+      {
+        label: "Deep Sleep Quality",
+        value: biometrics.sleepHours.toFixed(1),
+        unit: "h",
+        change: biometrics.sleepHours >= 7 ? "+12% vs avg" : "-15% vs avg",
+        icon: "bedtime",
+        color: "primary" as const,
+        trend: [5, 6, 7, 7.5, biometrics.sleepHours],
+      },
+      {
+        label: "Daily Steps",
+        value: biometrics.dailySteps.toLocaleString(),
+        unit: "",
+        change: `${Math.round((biometrics.dailySteps / 8000) * 100)}% of goal`,
+        icon: "directions_walk",
+        color: "secondary" as const,
+      },
+      {
+        label: "Resting Heart Rate",
+        value: biometrics.currentHeartRate.toString(),
+        unit: "bpm",
+        change: biometrics.currentHeartRate <= 70 ? "Stable" : "Elevated",
+        icon: "favorite",
+        color: "primary" as const,
+        trend: [65, 63, 64, biometrics.currentHeartRate],
+      },
+      {
+        label: "Heart Rate Variability",
+        value: hrvValue.toString(),
+        unit: "ms",
+        change: hrvValue >= 55 ? "High" : "Low",
+        icon: "electric_bolt",
+        color: "tertiary" as const,
+      },
+    ];
+  }, [biometrics]);
 
   const formattedLogs = useMemo(() => {
     if (!logs) return [];
@@ -46,15 +109,28 @@ export const Dashboard: React.FC<DashboardProps> = ({ className = "" }) => {
         <div className="p-8 space-y-10 max-w-7xl mx-auto">
           {/* Row 1: Readiness & Biometric Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <ReadinessCard className="lg:col-span-4" />
-            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-              {BIOMETRICS.map((metric) => (
-                <MetricCard
-                  key={metric.label}
-                  {...metric}
-                  color={metric.color as "primary" | "secondary" | "tertiary"}
-                />
-              ))}
+            <div className="lg:col-span-4">
+              <ReadinessCard score={readiness.score} status={readiness.status} description={readiness.description} />
+            </div>
+            <div className="lg:col-span-8 space-y-4">
+              <div className="flex justify-between items-center px-2">
+                <h3 className="text-xs font-bold tracking-widest text-outline uppercase">Live Vitals</h3>
+                <button
+                  onClick={() => setBiometricsModalOpen(true)}
+                  className="text-xs font-bold text-primary flex items-center gap-1 hover:underline bg-primary/5 px-3 py-1.5 rounded-lg transition-all"
+                >
+                  <span className="material-symbols-outlined text-[14px]">settings</span>
+                  Update Vitals
+                </button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {dynamicBiometrics.map((metric) => (
+                  <MetricCard
+                    key={metric.label}
+                    {...metric}
+                  />
+                ))}
+              </div>
             </div>
           </div>
 

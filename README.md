@@ -20,9 +20,9 @@ Slingshot-AMD is an AI nutrition engine that:
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
-- **AI**: Google Gemini 1.5 Pro
+- **AI**: Google Gemini 2.5-flash-lite
 - **Database**: Firebase Firestore
-- **Deployment**: Google Cloud Run
+- **Deployment**: Vercel
 
 ## Local Development
 
@@ -102,6 +102,17 @@ docker build -t slingshot-amd .
 docker run -p 3000:3000 --env-file .env.prod slingshot-amd
 ```
 
+### Vercel Deployment
+
+The project is optimized for deploying on Vercel as a standard Next.js application.
+
+1. **Import the repository** into Vercel.
+2. **Configure Environment Variables** in the Vercel project settings:
+   - `GOOGLE_API_KEY`: Your Gemini API key from Google AI Studio.
+   - `FIREBASE_SERVICE_ACCOUNT_KEY`: The contents of your Firebase Service Account JSON file as a single-line or multi-line string.
+   - `NEXT_PUBLIC_APP_URL`: The public URL of the deployed Vercel application.
+3. Click **Deploy**. Vercel will build and host the application automatically.
+
 ### Environment Variables for Production
 
 | Variable | Required | Description |
@@ -173,3 +184,17 @@ docker run -p 3000:3000 --env-file .env.prod slingshot-amd
 ---
 
 *Project: Slingshot-AMD | Powered by Google Cloud*
+
+---
+
+## 🛡️ Licensing & Privacy Protection
+
+Because this repository contains personal code, portfolios, or intellectual property, **strict privacy protections are in place**.
+
+### ⚠️ Prohibitions on AI Training & Scraping
+This repository is published for direct human viewing only. Automated data scraping, harvesting, and crawling are strictly prohibited under the author's personal copyright terms.
+
+**By accessing this repository or its contents, you agree to the following terms:**
+*   **NO AI/LLM Ingestion:** Any ingestion of code, text, layouts, designs, or assets for training, validation, testing, or tuning of machine learning models, neural networks, or artificial intelligence systems (such as Large Language Models) is strictly prohibited.
+*   **NO Automated Data Scraping:** Any automated extraction, parsing, harvesting, or scraping of content by bots, crawlers, scripts, or spiders is prohibited.
+*   **Personal Use Only:** Human viewing for personal or educational review is permitted. No duplication, modification, adaptation, or commercial distribution of this work is allowed without express written permission.

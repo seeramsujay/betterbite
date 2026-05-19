@@ -6,8 +6,10 @@ import { useAppStore } from "../../lib/store/useAppStore";
 import { fileToBase64 } from "../../lib/utils/image";
 import { trpc } from "../../app/utils/trpc";
 
+import { playAudioFeedback } from "../../lib/utils/audio";
+
 export const MealLogModal: React.FC = () => {
-  const { isMealLogOpen, setMealLogOpen } = useAppStore();
+  const { isMealLogOpen, setMealLogOpen, biometrics } = useAppStore();
   const utils = trpc.useUtils();
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -18,6 +20,7 @@ export const MealLogModal: React.FC = () => {
     if (!file) return;
 
     setIsAnalyzing(true);
+    playAudioFeedback("thinking");
     try {
       const base64 = await fileToBase64(file);
       const res = await fetch("/api/analyze", {
@@ -27,22 +30,25 @@ export const MealLogModal: React.FC = () => {
           image: base64,
           mimeType: file.type,
           biometrics: {
-            sleepHours: 7.5,
-            currentHeartRate: 72,
-            dailySteps: 5400,
+            sleepHours: biometrics.sleepHours,
+            currentHeartRate: biometrics.currentHeartRate,
+            dailySteps: biometrics.dailySteps,
           },
         }),
       });
 
       const data = await res.json();
       if (data.success) {
+        playAudioFeedback("success");
         setResult(data.data);
         utils.meal.getLogs.invalidate();
       } else {
+        playAudioFeedback("error");
         alert("Analysis failed: " + data.error);
       }
     } catch (err) {
       console.error(err);
+      playAudioFeedback("error");
       alert("Error processing image");
     } finally {
       setIsAnalyzing(false);
@@ -72,7 +78,7 @@ export const MealLogModal: React.FC = () => {
                 className={`border-2 border-dashed border-primary/30 rounded-2xl p-12 flex flex-col items-center justify-center gap-4 cursor-pointer hover:bg-primary/5 transition-all ${isAnalyzing ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 {isAnalyzing ? (
-                  <div className="flex flex-col items-center gap-4">
+                  <div className="flex flex-col items-center gap-4" aria-live="polite" role="status">
                     <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                     <p className="font-bold text-primary animate-pulse text-sm uppercase tracking-widest">Gemini Analyzing...</p>
                   </div>

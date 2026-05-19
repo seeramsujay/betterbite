@@ -2,6 +2,7 @@ import { z } from "zod";
 import { publicProcedure } from "../procedures";
 import { router } from "../trpc";
 import { db } from "../../lib/firebase/admin";
+import * as admin from "firebase-admin";
 
 export const mealRouter = router({
   getLogs: publicProcedure.query(async () => {
@@ -32,4 +33,23 @@ export const mealRouter = router({
 
     return snapshot.docs[0]?.data() || null;
   }),
+
+  updateBiometrics: publicProcedure
+    .input(z.object({
+      sleepHours: z.number().min(0).max(24),
+      currentHeartRate: z.number().min(30).max(250),
+      dailySteps: z.number().min(0),
+    }))
+    .mutation(async ({ input }) => {
+      const testUid = "demo_user_001";
+      const ref = await db
+        .collection("users")
+        .doc(testUid)
+        .collection("biometrics")
+        .add({
+          ...input,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        });
+      return { id: ref.id, ...input };
+    }),
 });

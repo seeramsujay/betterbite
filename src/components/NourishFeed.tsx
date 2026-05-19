@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import NourishSwapCard from "./nourish/NourishSwapCard";
 import RecipeCard from "./nourish/RecipeCard";
 import { NOURISH_SWAPS, SEASONAL_RECIPES } from "../data/mockData";
+import { useAppStore } from "../lib/store/useAppStore";
 
 const NourishSidebar = dynamic(() => import("./nourish/NourishSidebar"), { ssr: false });
 const NourishTopNav = dynamic(() => import("./nourish/NourishTopNav"), { ssr: false });
@@ -14,6 +15,8 @@ export interface NourishFeedProps {
 }
 
 export const NourishFeed: React.FC<NourishFeedProps> = ({ className = "" }) => {
+  const setAdaptModalOpen = useAppStore((s) => s.setAdaptModalOpen);
+
   return (
     <div className={`bg-background text-on-surface antialiased font-body min-h-screen ${className}`}>
       <NourishSidebar />
@@ -86,7 +89,10 @@ export const NourishFeed: React.FC<NourishFeedProps> = ({ className = "" }) => {
               <p className="font-body text-on-surface-variant max-w-sm mb-12">
                 Let our AI nutritionist adapt any recipe from the web to your unique metabolic profile.
               </p>
-              <button className="bg-primary text-on-primary px-10 py-5 text-sm uppercase tracking-[0.2em] font-bold hover:bg-primary-container transition-colors">
+              <button 
+                onClick={() => setAdaptModalOpen(true)}
+                className="bg-primary text-on-primary px-10 py-5 text-sm uppercase tracking-[0.2em] font-bold hover:bg-primary-container transition-colors"
+              >
                 Start Adaptation
               </button>
             </div>

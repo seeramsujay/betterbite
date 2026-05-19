@@ -30,10 +30,10 @@
 * [x] **Accessible Components**:
     * Build `Dashboard` using semantic HTML5 and Radix primitives.
     * Apply "Cyber-Organic" aesthetics (vibrant greens, glassmorphism, organic blurs).
-* [ ] **State & Performance**:
+* [x] **State & Performance**:
     * Integrate `Zustand` for biometric and meal state tracking.
     * Implement `next/dynamic` for heavy AI modals.
-* [ ] **Aria-Live Loading**: Visual and audible "Gemini Thinking" states.
+* [x] **Aria-Live Loading**: Visual and audible "Gemini Thinking" states.
 
 ## 🤖 Phase 4: Autonomous Pantry Sync (Agentic Feature)
 *Goal: Moving from advisor to actionable agent.*
@@ -51,4 +51,4 @@
     * Multi-stage `Dockerfile`.
 * [x] **Google Cloud Run Readiness**:
     * End-to-end testing (Vitest setup + passing tests).
-* [ ] **Cloud Run Deployment**: Final Deploy pass.
+* [x] **Cloud Run Deployment**: Final Deploy pass.
