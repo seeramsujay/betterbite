@@ -41,3 +41,5 @@ yarn-error.log*
 .vscode/
 .agent/
 .gemini/
+__pycache__/
+*.pyc
