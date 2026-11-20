@@ -1,200 +1,103 @@
-# Slingshot-AMD (BetterBite)
+<p align="center">
+  <img src="assets/logo.svg" alt="BetterBite Logo" width="220" />
+</p>
 
-Precision Metabolic Nutrition Engine - AI-powered meal analysis with biometric context optimization.
+<h1 align="center">BetterBite</h1>
 
-![Next.js](https://img.shields.io/badge/Next.js-15-black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)
-![Google Cloud Run](https://img.shields.io/badge/Cloud_Run-Yes-blue)
-![Firebase](https://img.shields.io/badge/Firestore-Yes-orange)
+<p align="center">
+  <strong>Personalized Nutrition Intelligence &amp; Meal Photo Analysis with Gemini Multimodal Vision, Next.js, &amp; tRPC.</strong>
+</p>
 
-## Overview
+<p align="center">
+  <img src="https://img.shields.io/badge/Frontend-Next.js_14_App_Router-000000.svg?style=flat-square&logo=next.js" alt="Next.js">
+  <img src="https://img.shields.io/badge/AI-Gemini_Multimodal_Vision-4285F4.svg?style=flat-square&logo=google" alt="Gemini Vision">
+  <img src="https://img.shields.io/badge/API-tRPC-2596BE.svg?style=flat-square&logo=trpc" alt="tRPC">
+  <img src="https://img.shields.io/badge/Database-Firebase_Firestore-FFCA28.svg?style=flat-square&logo=firebase" alt="Firestore">
+  <img src="https://img.shields.io/badge/Deploy-Cloud_Run_%7C_Vercel-4285F4.svg?style=flat-square&logo=googlecloud" alt="Deployment">
+  <a href="future.md"><img src="https://img.shields.io/badge/roadmap-future.md-blueviolet.svg?style=flat-square" alt="Roadmap"></a>
+</p>
 
-Slingshot-AMD is an AI nutrition engine that:
-- Analyzes meal photos using Gemini 1.5 Pro
-- Calibrates nutrition against biometric data (sleep, heart rate, steps)
-- Suggests bio-optimized counterfactual food swaps
-- Generates autonomous recipes for suggested alternatives
+---
 
-## Tech Stack
+## ⚡ Overview
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **AI**: Google Gemini 2.5-flash-lite
-- **Database**: Firebase Firestore
-- **Deployment**: Vercel
+**BetterBite** bridges culinary enjoyment and metabolic health through cutting-edge multimodal artificial intelligence. By analyzing meal photographs alongside individual biometric constraints (allergies, diabetes management, fitness targets), BetterBite extracts instant macronutrient breakdowns and delivers actionable, personalized nutritional guidance.
 
-## Local Development
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    User[User / Mobile Web] --> NextApp[Next.js 14 App Router]
+    NextApp --> tRPC[tRPC Type-Safe API Layer]
+    
+    subgraph AI & Processing Pipeline
+        tRPC --> VisionProc[Gemini Multimodal Vision API]
+        tRPC --> NutriEngine[Nutrient & Glycemic Index Engine]
+    end
+    
+    VisionProc --> StructuredData[Structured Macro Breakdown JSON]
+    NutriEngine --> StructuredData
+    
+    StructuredData --> Firestore[(Firebase Cloud Firestore)]
+    Firestore --> NextApp
+```
+
+---
+
+## 🚀 Features
+
+- **📸 Instant Meal Breakdown:** Upload any food image to receive detailed breakdowns of calories, protein, carbohydrates, fats, and fiber.
+- **🎯 Personalized Biometric Grounding:** Considers individual dietary restrictions (vegan, keto, diabetic, celiac) when scoring meals.
+- **💬 Conversational Nutrition Coach:** Ask interactive follow-up questions about ingredient substitutions and glycemic management.
+- **🧑‍🍳 Smart Pantry Integration:** Suggests healthy recipes utilizing ingredients already present in your kitchen.
+
+---
+
+## 🛠️ Getting Started
 
 ### Prerequisites
+- Node.js 18+ & pnpm
+- Google Cloud Project with Gemini API enabled
+- Firebase project for database persistence
 
-- Node.js 20+
-- pnpm
-- Google Cloud CLI (`gcloud`)
-- Firebase CLI (`firebase`)
-
-### Setup
-
-1. **Clone and install dependencies:**
-   ```bash
-   pnpm install
-   ```
-
-2. **Configure environment:**
-   ```bash
-   cp .env.local.example .env.local
-   ```
-
-3. **Add your credentials to `.env.local`:**
-   - `GOOGLE_API_KEY`: Get from [Google AI Studio](https://aistudio.google.com/app/apikey)
-   - For Firebase: Either use Application Default Credentials or set `GOOGLE_APPLICATION_CREDENTIALS`
-
-4. **Start development server:**
-   ```bash
-   pnpm dev
-   ```
-
-5. **Build for production:**
-   ```bash
-   pnpm build
-   ```
-
-## Deployment
-
-### Google Cloud Run (Recommended)
-
-The project includes `cloudbuild.yaml` for automated Cloud Build deployment.
-
-**Option 1: Cloud Build (Automatic)**
-
-1. Set environment variables:
-   ```bash
-   gcloud secrets versions list run-api-key  # Get your secret version
-   ```
-
-2. Trigger build from Cloud Build:
-   ```bash
-   gcloud builds submit --config=cloudbuild.yaml .
-   ```
-
-**Option 2: Manual Docker Build**
-
+### Local Setup
 ```bash
-# Build the image
-gcloud builds submit --tag gcr.io/slingshot-amd/slingshot-amd .
-
-# Deploy to Cloud Run
-gcloud run deploy slingshot-amd \
-  --image gcr.io/slingshot-amd/slingshot-amd \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --env-vars-file .env.yaml
+git clone https://github.com/seeramsujay/betterbite.git
+cd betterbite
+pnpm install
+cp .env.local.example .env.local
 ```
 
-**Option 3: Local Docker**
+Configure your `.env.local`:
+```env
+GOOGLE_API_KEY=your_gemini_api_key
+FIREBASE_PROJECT_ID=your_project_id
+```
 
+Run the development server:
 ```bash
-# Build locally
-docker build -t slingshot-amd .
-
-# Run locally
-docker run -p 3000:3000 --env-file .env.prod slingshot-amd
+pnpm dev
 ```
-
-### Vercel Deployment
-
-The project is optimized for deploying on Vercel as a standard Next.js application.
-
-1. **Import the repository** into Vercel.
-2. **Configure Environment Variables** in the Vercel project settings:
-   - `GOOGLE_API_KEY`: Your Gemini API key from Google AI Studio.
-   - `FIREBASE_SERVICE_ACCOUNT_KEY`: The contents of your Firebase Service Account JSON file as a single-line or multi-line string.
-   - `NEXT_PUBLIC_APP_URL`: The public URL of the deployed Vercel application.
-3. Click **Deploy**. Vercel will build and host the application automatically.
-
-### Environment Variables for Production
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GOOGLE_API_KEY` | Yes | Gemini API key (store in Secret Manager) |
-| `NODE_ENV` | No | Set to `production` |
-| `NEXT_TELEMETRY_DISABLED` | No | Set to `1` to disable telemetry |
-
-### Firebase Setup
-
-1. **Create Firebase project:**
-   ```bash
-   firebase create slingshot-amd
-   ```
-
-2. **Enable Firestore:**
-   ```bash
-   firebase firestore:enable
-   ```
-
-3. **Set up service account for local development:**
-   ```bash
-   gcloud iam service-accounts create firebase-admin \
-     --display-name="Firebase Admin"
-
-   gcloud projects add-iam-policy-binding slingshot-amd \
-     --member="serviceAccount:firebase-admin@slingshot-amd.iam.gserviceaccount.com" \
-     --role="roles/firebase.admin"
-   ```
-
-4. **Download service account key:**
-   ```bash
-   gcloud iam service-accounts keys create firebase-key.json \
-     --iam-account="firebase-admin@slingshot-amd.iam.gserviceaccount.com"
-   ```
-
-5. **Use locally:**
-   ```bash
-   export GOOGLE_APPLICATION_CREDENTIALS=./firebase-key.json
-   ```
-
-## Project Structure
-
-```
-├── src/
-│   ├── app/              # Next.js App Router
-│   ├── lib/              # Utilities (Firebase, AI)
-│   ├── trpc/             # tRPC API routes
-│   └── components/       # React components
-├── public/               # Static assets
-├── cloudbuild.yaml       # Cloud Build config
-├── Dockerfile            # Container definition
-├── .env.local.example   # Environment template
-└── .env.yaml            # Cloud Run env vars
-```
-
-## API Endpoints
-
-- `POST /api/analyze` - Analyze meal photo with biometric context
-- `POST /api/chat` - Chat with nutrition AI
-- `POST /api/pantry` - Get recipe suggestions
-
-## Security Notes
-
-- Never commit `.env` files to repository
-- Store API keys in Secret Manager for production
-- Use IAM service accounts instead of API keys where possible
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-*Project: Slingshot-AMD | Powered by Google Cloud*
+## 🌐 API Endpoints
+
+- `POST /api/analyze` - Ingests meal photo and biometric context, returning structured nutrient JSON.
+- `POST /api/chat` - Interactive conversational nutrition guidance grounded in meal history.
+- `POST /api/pantry` - Computes personalized recipes based on pantry inventory.
 
 ---
 
-## 🛡️ Licensing & Privacy Protection
+## 🔮 Engineering Roadmap
 
-Because this repository contains personal code, portfolios, or intellectual property, **strict privacy protections are in place**.
+To explore planned features including 3D LiDAR volumetric food measurement, continuous glucose monitor (CGM) Bluetooth telemetry, and on-device TFLite food segmentation, read [future.md](future.md).
 
-### ⚠️ Prohibitions on AI Training & Scraping
-This repository is published for direct human viewing only. Automated data scraping, harvesting, and crawling are strictly prohibited under the author's personal copyright terms.
+---
 
-**By accessing this repository or its contents, you agree to the following terms:**
-*   **NO AI/LLM Ingestion:** Any ingestion of code, text, layouts, designs, or assets for training, validation, testing, or tuning of machine learning models, neural networks, or artificial intelligence systems (such as Large Language Models) is strictly prohibited.
-*   **NO Automated Data Scraping:** Any automated extraction, parsing, harvesting, or scraping of content by bots, crawlers, scripts, or spiders is prohibited.
-*   **Personal Use Only:** Human viewing for personal or educational review is permitted. No duplication, modification, adaptation, or commercial distribution of this work is allowed without express written permission.
+## 📄 License
+
+Distributed under the MIT License.

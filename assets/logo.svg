@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080F12" />
+      <stop offset="50%" stop-color="#0F1F1C" />
+      <stop offset="100%" stop-color="#050A0C" />
+    </linearGradient>
+
+    <!-- Nutrition Green to Amber Gradient -->
+    <linearGradient id="bite-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="50%" stop-color="#22D3EE" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+
+    <linearGradient id="leaf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <linearGradient id="core-glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0.05" />
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="subtle-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="800" rx="160" fill="url(#bg-grad)" />
+  <rect width="796" height="796" x="2" y="2" rx="158" fill="none" stroke="#1E3A34" stroke-width="2" />
+
+  <!-- Vision Scanner Reticle / Plate Target Grid -->
+  <g opacity="0.16" stroke="#10B981" stroke-width="1.5">
+    <circle cx="400" cy="380" r="140" fill="none" stroke-dasharray="6 6" />
+    <circle cx="400" cy="380" r="230" fill="none" stroke-dasharray="8 8" />
+    <line x1="400" y1="100" x2="400" y2="660" stroke-dasharray="4 8" />
+    <line x1="120" y1="380" x2="680" y2="380" stroke-dasharray="4 8" />
+  </g>
+
+  <!-- Outer Plate / Dining Bowl Perimeter -->
+  <circle cx="400" cy="380" r="170" fill="url(#core-glow)" stroke="url(#bite-grad)" stroke-width="8" filter="url(#glow)" />
+
+  <!-- Multimodal Nutrition Vision Aperture / Stylized Apple & Leaf -->
+  <!-- Crisp Bite Cutout Geometric Curve -->
+  <path d="M 400 240 
+           C 490 240, 560 310, 560 400 
+           C 560 490, 490 540, 400 540 
+           C 310 540, 240 490, 240 400 
+           C 240 310, 310 240, 400 240 Z" 
+        fill="#0D1E1B" 
+        stroke="#10B981" 
+        stroke-width="5" />
+
+  <!-- Negative Space "Better Bite" Mark on Right Side -->
+  <circle cx="530" cy="360" r="48" fill="#080F12" stroke="url(#bite-grad)" stroke-width="5" />
+
+  <!-- Fork Prongs / Nutrition Analysis Frequency Rays inside -->
+  <g stroke="#22D3EE" stroke-width="4" stroke-linecap="round" filter="url(#subtle-glow)">
+    <line x1="360" y1="340" x2="360" y2="430" />
+    <line x1="400" y1="320" x2="400" y2="440" />
+    <line x1="440" y1="340" x2="440" y2="430" />
+    <!-- Fork Crossbar & Stem -->
+    <path d="M 360 430 Q 400 460, 440 430" fill="none" stroke="#22D3EE" stroke-width="4" />
+    <line x1="400" y1="450" x2="400" y2="490" />
+  </g>
+
+  <!-- Organic Nutrition Sprout / Leaf at Top -->
+  <path d="M 400 240 C 400 180, 450 170, 460 200 C 460 230, 420 240, 400 240 Z" fill="url(#leaf-grad)" stroke="#F8FAFC" stroke-width="2" filter="url(#subtle-glow)" />
+
+  <!-- Macro Telemetry Dots (Protein, Carbs, Fats) -->
+  <circle cx="310" cy="340" r="7" fill="#10B981" filter="url(#subtle-glow)" />
+  <circle cx="310" cy="420" r="7" fill="#F59E0B" filter="url(#subtle-glow)" />
+  <circle cx="490" cy="460" r="7" fill="#22D3EE" filter="url(#subtle-glow)" />
+
+  <!-- Typography -->
+  <text x="400" y="685" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="#F8FAFC" letter-spacing="4">
+    BETTER<tspan fill="#10B981">BITE</tspan>
+  </text>
+  <text x="400" y="722" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="600" fill="#94A3B8" letter-spacing="3">
+    PERSONALIZED MULTIMODAL NUTRITION AI
+  </text>
+</svg>
